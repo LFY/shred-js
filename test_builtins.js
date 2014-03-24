@@ -27,19 +27,6 @@ var fs = require('fs');
 
 module.exports.__annotations__ = {};
 
-var list_primitives = function () {
-    var res = [];
-    var non_primitives = ["__annotations__", "list_primitives", "args_to_list", "wrapped_mh_query", "wrapped_rejection_query", "wrapped_enumeration_query", "wrapped_eval", "read_file", "read_csv", "bootstrap", "update_list"];
-    for (name in module.exports) {
-        if (!_.contains(non_primitives, name)) {
-            res.push([name, module.exports[name]]);
-        }
-    }
-    return res;
-}
-
-module.exports["list_primitives"] = list_primitives;
-
 var addBuiltin = function(dict) {
   var fWrapped = wrapAsserts(dict);
   
