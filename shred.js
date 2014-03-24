@@ -2,6 +2,13 @@
 
 module.exports = {};
 
+var debugp = false;
+module.exports.debug_mode = debugp;
+
+var debug_print = function (x) {
+    if (debugp) { console.log(x); } 
+}
+
 var var_ctr = 0;
 var seq_var_gen = function () {
     var res_var = "X" + (var_ctr.toString());
@@ -72,12 +79,19 @@ var val_of = function (x) { return x[1]; }
 // shred: Transform a given primitive PROC with NUM_ARGS arguments into a
 // traced version that has name NAME
 
-function shred(name, num_args, proc) {
+function shred(name, proc) {
     function call() {
+        debug_print("call " + name);
+        debug_print(proc);
+        debug_print(arguments);
+
+        var num_args = arguments.length;
+
         var vars = [];
         var vals = [];
         for (var i = 0; i < num_args; i++) {
             var arg = arguments[i];
+            debug_print(arg);
             vars.push(var_of(arg));
             vals.push(val_of(arg));
         }
@@ -100,6 +114,8 @@ function const_(cval) {
     return new_cell;
 }
 
+module.exports._const = const_;
+
 // untraced_if: Trace through if-statements, ignoring them.
 
 function untraced_if(c, t, e) {
@@ -112,6 +128,9 @@ function untraced_if(c, t, e) {
         return e();
     }
 }
+
+module.exports._if = untraced_if;
+
 
 // dump_trace: Print the trace.
 function dump_trace() {
