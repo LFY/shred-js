@@ -1,3 +1,3 @@
 mergeInto(LibraryManager.library, {
-    js_random : function () { return Math.random(); }
+    random : function () { return Math.random(); },
 });
