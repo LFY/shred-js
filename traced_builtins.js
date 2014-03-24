@@ -2,7 +2,7 @@
 
 _ = require("underscore");
 shred = require("./shred");
-church = require("./test_builtins");
+church = require("./webchurch/church_builtins");
 
 // Begin module generation======================================================
 
@@ -10,7 +10,7 @@ module.exports.__annotations__ = {};
 
 var list_primitives = function (module) {
     var res = [];
-    var non_primitives = ["__annotations__", "list_primitives", "args_to_list", "wrapped_mh_query", "wrapped_rejection_query", "wrapped_enumeration_query", "wrapped_eval", "read_file", "read_csv", "bootstrap", "update_list"];
+    var non_primitives = ["__annotations__", "_const", "list_primitives", "args_to_list", "wrapped_mh_query", "wrapped_rejection_query", "wrapped_enumeration_query", "wrapped_eval", "read_file", "read_csv", "bootstrap", "update_list"];
     for (name in module) {
         if (!_.contains(non_primitives, name)) {
             res.push([name, module[name]]);
@@ -45,10 +45,10 @@ for (idx in churchprims) {
 
     name = churchprims[idx][0];
     func = churchprims[idx][1];
-
-    shred_func = shred.shred(name, func);
-
     orig_dict = church.__annotations__[name];
+
+    shred_func = shred.shred(name, orig_dict.params.length, func);
+
     shred_dict = copyAnnotationDict(orig_dict);
 
     shred_dict.fn = shred_func;
