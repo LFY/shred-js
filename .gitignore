@@ -2,3 +2,6 @@
 *.swn
 *.swp
 *.swo
+*.out
+*.out.js
+*.out.*
