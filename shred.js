@@ -121,26 +121,24 @@ function dump_trace() {
 }
 
 
-
 // End Shred Functions==========================================================
-
 
 // Tests =======================================================================
 // Arithmetic language: Adding/subtracing numbers + comparing equality
 
-var add = shred("add", 2, function (x, y) { return x + y; });
-var sub = shred("sub", 2, function (x, y) { return x - y; });
-var eq = shred("=", 2, function (x, y) { return x == y; });
-var if_ = untraced_if;
-
-// Tracing the sum function:
-
-function sum_from(n) {
-    return if_(eq(n, const_(0)), 
-            function () { return const_(0); },
-            function () { return add(n, sum_from(sub(n, const_(1)))); });
-}
-
-sum_from(const_(10));
-
-console.log(dump_trace());
+// var add = shred("add", 2, function (x, y) { return x + y; });
+// var sub = shred("sub", 2, function (x, y) { return x - y; });
+// var eq = shred("=", 2, function (x, y) { return x == y; });
+// var if_ = untraced_if;
+// 
+// // Tracing the sum function:
+// 
+// function sum_from(n) {
+//     return if_(eq(n, const_(0)), 
+//             function () { return const_(0); },
+//             function () { return add(n, sum_from(sub(n, const_(1)))); });
+// }
+// 
+// sum_from(const_(10));
+// 
+// console.log(dump_trace());
