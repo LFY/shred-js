@@ -1,5 +1,7 @@
 // User-defined primitives for the variable and statement datatypes.
 
+module.exports = {};
+
 var var_ctr = 0;
 var seq_var_gen = function () {
     var res_var = "X" + (var_ctr.toString());
@@ -87,6 +89,9 @@ function shred(name, num_args, proc) {
     return call;
 }
 
+module.exports.shred = shred
+
+// A simple language
 // const_: Transform a given regular JS value into a singular statement.
 
 function const_(cval) {
@@ -120,6 +125,7 @@ function dump_trace() {
     return res;
 }
 
+module.exports.dump_trace = dump_trace
 
 // End Shred Functions==========================================================
 
