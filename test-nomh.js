@@ -301,3 +301,4 @@ enterfn(76);
 var call76 = make_45sample();
 leavefn();
 call76;
+console.log(dump_trace());
