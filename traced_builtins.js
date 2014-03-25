@@ -60,7 +60,10 @@ for (idx in churchprims) {
     addBuiltin(shred_dict);
 }
 
+// Important stuff
+
 module.exports._const = shred._const;
+module.exports._if = shred._if;
 
 // Patch things up
 
@@ -94,7 +97,6 @@ for (idx in untraced_primitives) {
         addBuiltin(orig_dict);
     }
 }
-
 
 module.exports.dump_trace = shred.dump_trace
 
