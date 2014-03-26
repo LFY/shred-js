@@ -70,7 +70,7 @@ module.exports._if = shred._if;
 var _is_null = module.exports["is_null"];
 var _pair = module.exports["pair"];
 var _first = module.exports["first"];
-var _rest = module.exports["first"];
+var _rest = module.exports["rest"];
 
 var recMap = function(f, xs) {
     return shred._if(_is_null(xs), 
