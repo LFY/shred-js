@@ -73,8 +73,8 @@ var cell_ret = function (val) { return [next_var(), val] }
 
 // Accessors
 
-var var_of = function (x) { return x[0]; }
-var val_of = function (x) { return x[1]; }
+var var_of = function (x) { if (x == undefined) { return x; } else { return x[0]; } }
+var val_of = function (x) { if (x == undefined) { return x; } else { return x[1]; } }
 
 // shred: Transform a given primitive PROC with NUM_ARGS arguments into a
 // traced version that has name NAME
@@ -91,11 +91,17 @@ function shred(name, proc) {
         var vals = [];
         for (var i = 0; i < num_args; i++) {
             var arg = arguments[i];
+            debug_print("arg");
             debug_print(arg);
             vars.push(var_of(arg));
             vals.push(val_of(arg));
         }
+            debug_print("vals");
+            debug_print(vals);
+            debug_print(proc);
         var retval = proc.apply(this, vals);
+        debug_print("retval");
+        debug_print(retval);
         var retvar = next_var();
         add_stmt(retvar, name, vars);
         return [retvar, retval];
