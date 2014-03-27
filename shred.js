@@ -21,16 +21,16 @@ var append_trace_buffer = function (resvar, proc, arg_vars) {
     trace_buffer.push([resvar, proc, arg_vars]);
 }
 
-function simple_stmt_dump(stmt) {
+function js_stmt_dump(stmt) {
     var lhsvar = stmt[0];
     var procname = stmt[1];
     var args = stmt[2];
 
     var nargs = args.length;
 
-    var res = "";
+    var res = "var ";
     res += lhsvar;
-    res += " <- " + procname + "(";
+    res += " = " + procname + "(";
 
     for(var i = 0; i < nargs; i++) {
         res += args[i];
@@ -41,7 +41,7 @@ function simple_stmt_dump(stmt) {
         }
     }
 
-    res += ")\n";
+    res += ");\n";
 
     return res;
 }
@@ -60,7 +60,7 @@ var add_stmt = append_trace_buffer;
 
 // dump_stmt: Output format of each trace statement. 
 
-var dump_stmt = simple_stmt_dump;
+var dump_stmt = js_stmt_dump;
 
 // Shred Functions==============================================================
 
