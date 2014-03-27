@@ -116,7 +116,7 @@ module.exports.shred = shred
 
 function const_(cval) {
     var new_cell = cell_ret(cval);
-    add_stmt(var_of(new_cell), "const", [val_of(new_cell)]);
+    add_stmt(var_of(new_cell), "_const", [val_of(new_cell)]);
     return new_cell;
 }
 
