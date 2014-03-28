@@ -47,7 +47,7 @@ for (idx in churchprims) {
 
     name = churchprims[idx][0];
     func = churchprims[idx][1];
-    console.log(name);
+    // console.log(name);
     orig_dict = church.__annotations__[name];
 
     shred_func = shred.shred(name, func);
@@ -56,7 +56,7 @@ for (idx in churchprims) {
 
     shred_dict.fn = shred_func;
 
-    console.log(shred_dict);
+    // console.log(shred_dict);
     addBuiltin(shred_dict);
 }
 
@@ -87,7 +87,7 @@ replaced_functions = {
     }
 }
 
-console.log("patching");
+// console.log("patching");
 for (idx in untraced_primitives) {
     name = untraced_primitives[idx];
     if (name in replaced_functions) {
