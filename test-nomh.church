@@ -37,4 +37,4 @@
     (define sample (list alpha beta (/ 1.0 (expt tau 0.5)) tau))
     sample)
 
-(make-sample)
+(define sample (make-sample))
