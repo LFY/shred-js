@@ -1,0 +1,5 @@
+cat tracing-preamble.js > test-nomh.js
+./church test-nomh.church >> test-nomh.js
+echo "console.log(dump_trace());" >> test-nomh.js
+cat direct-preamble.js > trace-nomh.js
+node test-nomh.js >> trace-nomh.js
