@@ -1,17 +1,5 @@
-var __pr = null;
-try {
-    __pr = require('probabilistic/index');
-} catch (e) {
-    __pr = require('./probabilistic/index');
-}
-__pr.openModule(__pr);
-var __ch = null;
-var builtin_id = "traced_builtins";
-try {
-    __ch = require(builtin_id);
-} catch (e) {
-    __ch = require('./' + builtin_id);
-}
+__pr = require("./probabilistic/index"); __pr.openModule(__pr);
+__ch = require("./traced_builtins");
 openModule(__ch);
 enterfn(0);
 var call0 = _const(3.141592653589793);
@@ -253,12 +241,11 @@ var make_45sample = function () {
         var call64 = glp(m, v, x);
         leavefn();
         enterfn(65);
-        var call65 = factor(call64);
+        var call65 = wrapped_factor(call64);
         leavefn();
         return call65;
     };
     enterfn(74);
-
     var call74 = map(function (xy) {
             enterfn(66);
             var call66 = first(xy);
@@ -309,5 +296,6 @@ var make_45sample = function () {
 enterfn(80);
 var call80 = make_45sample();
 leavefn();
-call80;
+var sample = call80;
+undefined
 console.log(dump_trace());
