@@ -111,6 +111,8 @@ function shred(name, proc) {
 
 module.exports.shred = shred
 
+// Retracing====================================================================
+
 function reshred(name, proc) {
     function call() {
         debug_print("reshred-call " + name);
@@ -162,15 +164,22 @@ function untraced_if(c, t, e) {
 module.exports._if = untraced_if;
 
 
-// dump_trace: Print the trace.
-function dump_trace() {
+function dump_stmt_list(stmts) {
     res = "";
-    var nstmts = trace_buffer.length;
+    var nstmts = stmts.length;
 
     for (var i = 0; i < nstmts; i++) {
-        res += dump_stmt(trace_buffer[i]);
+        res += dump_stmt(stmts[i]);
     }
 
+    return res;
+}
+
+module.exports.dump_stmt_list = dump_stmt_list
+
+// dump_trace: Print the trace.
+function dump_trace() {
+    dump_stmt_list(trace_buffer);
     return res;
 }
 
