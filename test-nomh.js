@@ -1,6 +1,6 @@
+
 __pr = require("./probabilistic/index"); __pr.openModule(__pr);
-__ch = require("./traced_builtins");
-openModule(__ch);
+__ch = require("./traced_builtins"); __pr.openModule(__ch);
 enterfn(0);
 var call0 = _const(3.141592653589793);
 leavefn();
