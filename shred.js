@@ -111,6 +111,30 @@ function shred(name, proc) {
 
 module.exports.shred = shred
 
+function reshred(name, proc) {
+    function call() {
+        debug_print("reshred-call " + name);
+        debug_print(proc);
+        debug_print(arguments);
+
+        var num_args = arguments.length;
+
+        var vars = [];
+        for (var i = 0; i < num_args; i++) {
+            var arg = arguments[i];
+            debug_print("arg");
+            debug_print(arg);
+            vars.push(arg);
+        }
+        var retvar = next_var();
+        add_stmt(retvar, name, vars);
+        return retvar;
+    }
+    return call;
+}
+
+module.exports.reshred = reshred
+
 // A simple language
 // const_: Transform a given regular JS value into a singular statement.
 
