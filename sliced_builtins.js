@@ -32,3 +32,10 @@ function advance_slice_state(lhsv, procname, rhsvs) {
         SLICE_STATE.slice.push([lhsv, procname, rhsvs]);
     }
 }
+function set_slice_from(retv, procname, callvs) { 
+    SLICE_STATE.slice_variables = [retv]; 
+    SLICE_STATE.slice = [[retv, procname, callvs]];
+}
+function dump_slice() { 
+    return shred.dump_stmt_list(SLICE_STATE.slice); 
+}
