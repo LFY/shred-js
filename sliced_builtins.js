@@ -39,3 +39,29 @@ function set_slice_from(retv, procname, callvs) {
 function dump_slice() { 
     return shred.dump_stmt_list(SLICE_STATE.slice); 
 }
+
+function fwdsliced(name, trace_proc) {
+    var call = function () {
+        var call_vars = [];
+        for (var i = 0; i < arguments.length; i++) {
+            call_vars.push(arguments[i]);
+        }
+
+        var retvar = trace_proc.apply(this, arguments);
+
+        var stmt = [retvar, name, call_vars];
+
+        advance_slice_state(retvar, name, call_vars);
+
+        return retvar;
+    }
+    return call;
+}
+synth_builtins = bt.synthesize_builtins(retraced, fwdsliced, []);
+module.exports = synth_builtins.exports;
+module.exports.__annotations__ = synth_builtins.exports.__annotations__;
+// Same _const as before
+module.exports._const = retraced._const;
+module.exports.dump_trace = shred.dump_trace;
+module.exports.set_slice_from = set_slice_from;
+module.exports.dump_slice  = dump_slice;
