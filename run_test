@@ -1,5 +1,28 @@
-cat tracing-preamble.js > test-nomh.js
+echo "Tracing semantics...\n"
+python generate_preamble.py ./traced_builtins test-nomh.js
 ./church test-nomh.church >> test-nomh.js
 echo "console.log(dump_trace());" >> test-nomh.js
-cat direct-preamble.js > trace-nomh.js
+
+echo "Direct trace semantics...\n"
+python generate_preamble.py ./webchurch/church_builtins trace-nomh.js
 node test-nomh.js >> trace-nomh.js
+node trace-nomh.js
+
+echo "Retracing semantics...\n"
+python generate_preamble.py ./retraced_builtins trace-nomh.js
+node test-nomh.js >> trace-nomh.js
+echo "console.log(dump_trace());" >> trace-nomh.js
+
+python generate_preamble.py ./webchurch/church_builtins retraced-nomh.js
+node trace-nomh.js >> retraced-nomh.js
+node retraced-nomh.js
+
+echo "Deforestation semantics...\n"
+python generate_preamble.py ./deforest_builtins trace-nomh.js
+node test-nomh.js >> trace-nomh.js
+echo "console.log(dump_trace());" >> trace-nomh.js
+
+python generate_preamble.py ./webchurch/church_builtins deforest-nomh.js
+node trace-nomh.js >> deforest-nomh.js
+node deforest-nomh.js
+
