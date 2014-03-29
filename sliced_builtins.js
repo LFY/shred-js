@@ -33,6 +33,12 @@ function advance_slice_state(lhsv, procname, rhsvs) {
     }
 }
 
+// So let's get this straight. You want to execute the trace statements in the
+// original order, but produce a BACKWARD SLICE; i.e., all statements on which
+// some variable is dependent.  That is totally OK and not crazy at all, you
+// just need to hook together a truckload (where 1 truckload \propto
+// #statements) of continuations to do so.
+
 function retract_slice_state(lhsv, procname, rhsvs) {
     function remove_elt(items, item) {
         while (items.indexOf(item) !== -1) {
@@ -65,14 +71,18 @@ function retract_slice_state(lhsv, procname, rhsvs) {
     };
     SLICE_STATE.depk.push(next_step);
 }
+
+
 function set_slice_from(retv, procname, callvs) { 
     SLICE_STATE.slice_variables = [retv]; 
     SLICE_STATE.slice = [[retv, procname, callvs]];
 }
 
 function bwd_slice_of(v, procname, callvs) {
+    console.log(SLICE_STATE.depk);
     SLICE_STATE.depk[SLICE_STATE.depk.length - 1]([v]);
 }
+
 function dump_slice() { 
     return shred.dump_stmt_list(SLICE_STATE.slice); 
 }
@@ -95,12 +105,15 @@ function fwdsliced(name, trace_proc) {
     }
     return call;
 }
+
 synth_builtins = bt.synthesize_builtins(retraced, fwdsliced, []);
 module.exports = synth_builtins.exports;
 module.exports.__annotations__ = synth_builtins.exports.__annotations__;
+
 // Same _const as before
 module.exports._const = retraced._const;
 module.exports.dump_trace = shred.dump_trace;
+
 module.exports.set_slice_from = set_slice_from;
 module.exports.bwd_slice_of = bwd_slice_of;
 module.exports.dump_slice  = dump_slice;
