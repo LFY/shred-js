@@ -40,12 +40,26 @@ var recMap = function(f, xs) {
                      function () { return _pair(f(_first(xs)), recMap(f, _rest(xs))); });
 }
 
+var recSum = function(xs) {
+    return shred._if(_is_null(xs), 
+                     function () { return _const(0); },
+                     function () { return module.exports.plus(_first(xs),recSum(_rest(xs))); });
+}
+
+// TODO: rest of the untraced primitives
+
 replaced_functions = {
     map : {
         name : 'map',
         desc : 'traced map',
         params : [{name : 'f'}, {name : 'xs'}],
         fn : recMap
+    },
+    sum : {
+        name : 'sum',
+        desc : 'traced sum',
+        params : [{name : 'xs'}],
+        fn : recSum
     }
 }
 
