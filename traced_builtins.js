@@ -63,14 +63,16 @@ replaced_functions = {
     }
 }
 
-// console.log("patching");
+// patch the untraced primitives back in
 for (idx in untraced_primitives) {
     name = untraced_primitives[idx];
-    if (name in replaced_functions) {
-        addBuiltin(replaced_functions[name])
-    } else {
-        orig_dict = church.__annotations__[name];
-        addBuiltin(orig_dict);
+    if (!(name in module.exports.__annotations__)) {
+        if (name in replaced_functions) {
+            bt.addBuiltin(module, replaced_functions[name])
+        } else {
+            orig_dict = church.__annotations__[name];
+            bt.addBuiltin(module, orig_dict);
+        }
     }
 }
 
