@@ -1,6 +1,5 @@
 // generates a module with traced versions of the church builtins that also 
 // perform slicing.
-//
 
 _ = require("underscore");
 shred = require("./shred");
@@ -49,12 +48,10 @@ function retract_slice_state(lhsv, procname, rhsvs) {
 
     var call = function(deplist, k) {
         if (deplist == []) { return k([]); } else {
-            console.log(deplist)
             if (_.contains(deplist, lhsv)) {
                 SLICE_STATE.slice.push([lhsv, procname, rhsvs]);
                 // var next_deplist = _.filter(deplist, function (x) { x != lhsv });
                 for (var i = 0; i < rhsvs.length; i++) {
-            console.log("PUSH");
                     if (!(_.contains(deplist, rhsvs[i]))) {
                         deplist.push(rhsvs[i]);
                     }
