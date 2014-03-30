@@ -1,7 +1,16 @@
 // Functions for asking simple things of and about traces.
 
 _ = require("underscore");
-shred = require("./shred");
+
+// Contexts
+
+// assumption: trace_buffer is occupied by the time we get to using this library.
+
+shred_cxt = require("./shred"); 
+
+retrace_cxt = require("./retraced_builtins");
+deforest_cxt = require("./deforest_builtins");
+slice_cxt = require("./sliced_builtins");
 
 // Queries about statements of certain types====================================
 
@@ -21,16 +30,90 @@ var xrp_names = [
 var xrp_procs = _.map(xrp_names, function (s) { return "wrapped_" + s; });
 
 function all_xrp_stmts(stmts) {
-    return _.filter(stmts, function (s) { return _.contains(xrp_procs, s); });
-}
-
-function all_factors(stmts) {
-    return _.filter(stmts, function (s) { return _.contains(["wrapped_factor"], s); });
+    return _.filter(stmts, function (s) { return _.contains(xrp_procs, s[1]); });
 }
 
 module.exports.all_xrp_stmts = all_xrp_stmts
+
+function all_factors(stmts) {
+    return _.filter(stmts, function (s) { return _.contains(["wrapped_factor"], s[1]); });
+}
+
 module.exports.all_factors = all_factors
 
+// From webchurch/js_astify.js
+var deep_copy = function(x) { return JSON.parse(JSON.stringify(x)); }
+
+// Evaluating traces
+function semantics_preamble(semantics_lib) {
+    var preamble_str_pre = "__pr = require(\"./probabilistic/index\"); __pr.openModule(__pr); __int = require(\"./trace_interface\"); __ch = require(\"";
+    
+    var preamble_str_post = "\"); openModule(__ch);\n";
+
+    return preamble_str_pre + semantics_lib + preamble_str_post;
+}
+
+function eval_trace(preamble, trace_string, postprocess) { eval(preamble + trace_string + postprocess); } 
+
+function get_nonscoring_stmts() {
+
+    var factors = all_factors(shred_cxt.trace_buffer);
+    var xrps = all_xrp_stmts(shred_cxt.trace_buffer);
+
+    var rel_vars = _.map(factors.concat(xrps), function (x) { return x[0]; });
+    bwd_slice_of(rel_vars);
+
+    return deep_copy(slice_cxt.state.slice);
+}
+
+module.exports.get_nonscoring_stmts = get_nonscoring_stmts
+
+function gen_slice(all_stmts, xrp_stmt) {
+
+    // slice_cxt.reset_slice_state();
+
+    // var preamble = semantics_preamble("./sliced_builtins");
+    var preamble = "";
+    var preprocess = "console.log(this.state);\n";
+    preprocess += "set_slice_from(" + JSON.stringify(xrp_stmt[0]) + ", " + JSON.stringify(xrp_stmt[1]) + ", " + JSON.stringify(xrp_stmt[2]) + ");\n";
+
+    var trace_str = shred_cxt.dump_stmt_list(all_stmts);
+
+    var postprocess = "reset_slice_state(); console.log(state);";
+    var code = (preamble + preprocess + trace_str + postprocess);
+
+    console.log(code);
+    var ret = eval.apply(slice_cxt, [code]);
+
+    console.log("RET");
+    console.log(ret);
+
+    return deep_copy(slice_cxt.state.slice);
+}
+
+function get_slices() {
+
+    slice_cxt.reset_slice_state();
+
+    var all_stmts = deep_copy(shred_cxt.trace_buffer);
+
+    var xrps = all_xrp_stmts(shred_cxt.trace_buffer);
+
+    var slices = [];
+    // for (var i = 0; i < xrps.length; i++) {
+    for (var i = 0; i < 1; i++) {
+        slices.push(gen_slice(all_stmts, xrps[i]));
+    }
+
+//     for (var i = 0; i < slices.length; i++) {
+//         console.log(shred_cxt.dump_stmt_list(slices[i]));
+// 
+//     }
+    return slices;
+}
+
+module.exports.get_slices = get_slices;
+ 
 // TODO:
 
 // 0. Generation of an environment that contains all state variables.
