@@ -31,3 +31,17 @@ function all_factors(stmts) {
 module.exports.all_xrp_stmts = all_xrp_stmts
 module.exports.all_factors = all_factors
 
+// TODO:
+
+// 0. Generation of an environment that contains all state variables.
+
+// 1. Generation of a scoring function given a trace that has some
+// wrapped_<xrp> and wrapped_factor statements. It is also against a global
+// scope that includes all "state" variables.
+
+// 2. The above function, generate_scorer, can also be used to generate slices.
+
+// 3. Packaging up the scoring functions by associating them with certain
+// subsets of XRP addresses. This is going to take some extra looking into
+// (step 1: fork probabilistic-js)
+
