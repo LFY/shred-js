@@ -64,6 +64,8 @@ var add_stmt = append_trace_buffer;
 
 var dump_stmt = js_stmt_dump;
 
+module.exports.dump_stmt = js_stmt_dump;
+
 // Shred Functions==============================================================
 
 // Basic datatype: Every val in the program augmented to a "cell": [var, val].
