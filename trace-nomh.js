@@ -1,6 +1,7 @@
 
 __pr = require("./probabilistic/index"); __pr.openModule(__pr);
 __ch = require("./deforest_builtins"); __pr.openModule(__ch);
+__int = require("./trace_interface");
 var X0 = _const(3.141592653589793);
 var X1 = _const(0);
 var X2 = _const(51);

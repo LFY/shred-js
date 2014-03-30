@@ -3,6 +3,7 @@ import sys
 preamble = """
 __pr = require("%s"); __pr.openModule(__pr);
 __ch = require("%s"); __pr.openModule(__ch);
+__int = require("./trace_interface");
 """ % ("./probabilistic/index", sys.argv[1])
 
 outfn = sys.argv[2]

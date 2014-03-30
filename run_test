@@ -26,3 +26,9 @@ python generate_preamble.py ./webchurch/church_builtins deforest-nomh.js
 node trace-nomh.js >> deforest-nomh.js
 node deforest-nomh.js
 
+echo "Slicing...\n"
+echo "console.log(dump_trace());" >> deforest-nomh.js
+python generate_preamble.py ./sliced_builtins slice-nomh.js
+node trace-nomh.js >> slice-nomh.js
+echo "__int.get_slices();" >> slice-nomh.js
+node slice-nomh.js

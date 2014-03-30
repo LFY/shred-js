@@ -95,11 +95,10 @@ function get_slices() {
         slices.push(gen_slice(all_stmts, xrps[i]));
     }
 
-    for (var i = 0; i < slices.length; i++) {
-        console.log("SLICE");
-        console.log(shred_cxt.dump_stmt_list(slices[i]));
-
-    }
+    // for (var i = 0; i < slices.length; i++) {
+    //     console.log("SLICE");
+    //     console.log(shred_cxt.dump_stmt_list(slices[i]));
+    // }
     return slices;
 }
 
