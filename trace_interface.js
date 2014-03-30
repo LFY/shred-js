@@ -70,24 +70,14 @@ module.exports.get_nonscoring_stmts = get_nonscoring_stmts
 
 function gen_slice(all_stmts, xrp_stmt) {
 
-    // slice_cxt.reset_slice_state();
+    slice_cxt.reset_slice_state();
+    shred_cxt.reset_var_ctr();
+    slice_cxt.set_slice_from(xrp_stmt[0], xrp_stmt[1], xrp_stmt[2]);
 
-    // var preamble = semantics_preamble("./sliced_builtins");
-    var preamble = "";
-    var preprocess = "console.log(this.state);\n";
-    preprocess += "set_slice_from(" + JSON.stringify(xrp_stmt[0]) + ", " + JSON.stringify(xrp_stmt[1]) + ", " + JSON.stringify(xrp_stmt[2]) + ");\n";
-
-    var trace_str = shred_cxt.dump_stmt_list(all_stmts);
-
-    var postprocess = "reset_slice_state(); console.log(state);";
-    var code = (preamble + preprocess + trace_str + postprocess);
-
-    console.log(code);
-    var ret = eval.apply(slice_cxt, [code]);
-
-    console.log("RET");
-    console.log(ret);
-
+    with(slice_cxt) {
+        var trace_str = shred_cxt.dump_stmt_list(all_stmts);
+        eval.call(this, trace_str);
+    }
     return deep_copy(slice_cxt.state.slice);
 }
 
@@ -101,14 +91,15 @@ function get_slices() {
 
     var slices = [];
     // for (var i = 0; i < xrps.length; i++) {
-    for (var i = 0; i < 1; i++) {
+    for (var i = 0; i < xrps.length; i++) {
         slices.push(gen_slice(all_stmts, xrps[i]));
     }
 
-//     for (var i = 0; i < slices.length; i++) {
-//         console.log(shred_cxt.dump_stmt_list(slices[i]));
-// 
-//     }
+    for (var i = 0; i < slices.length; i++) {
+        console.log("SLICE");
+        console.log(shred_cxt.dump_stmt_list(slices[i]));
+
+    }
     return slices;
 }
 
