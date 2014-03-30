@@ -69,15 +69,14 @@ function retract_slice_state(lhsv, procname, rhsvs) {
     SLICE_STATE.depk.push(next_step);
 }
 
-
 function set_slice_from(retv, procname, callvs) { 
     SLICE_STATE.slice_variables = [retv]; 
     SLICE_STATE.slice = [[retv, procname, callvs]];
 }
 
-function bwd_slice_of(v, procname, callvs) {
-    console.log(SLICE_STATE.depk);
-    SLICE_STATE.depk[SLICE_STATE.depk.length - 1]([v]);
+function bwd_slice_of(vs) {
+    SLICE_STATE.depk[SLICE_STATE.depk.length - 1](vs);
+    SLICE_STATE.slice.reverse();
 }
 
 function dump_slice() { 
