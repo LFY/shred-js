@@ -83,7 +83,7 @@ function dump_slice() {
     return shred.dump_stmt_list(SLICE_STATE.slice); 
 }
 
-function fwdsliced(name, trace_proc) {
+function sliced(name, trace_proc) {
     var call = function () {
         var call_vars = [];
         for (var i = 0; i < arguments.length; i++) {
@@ -103,6 +103,7 @@ function fwdsliced(name, trace_proc) {
 }
 
 synth_builtins = bt.synthesize_builtins(retraced, fwdsliced, []);
+synth_builtins = bt.synthesize_builtins(retraced, sliced, []);
 module.exports = synth_builtins.exports;
 module.exports.__annotations__ = synth_builtins.exports.__annotations__;
 
