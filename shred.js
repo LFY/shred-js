@@ -17,6 +17,8 @@ var seq_var_gen = function () {
 }
 
 var trace_buffer = [];
+module.exports.trace_buffer = trace_buffer;
+
 var append_trace_buffer = function (resvar, proc, arg_vars) {
     trace_buffer.push([resvar, proc, arg_vars]);
 }
