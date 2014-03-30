@@ -17,6 +17,7 @@ var SLICE_STATE = {
     depk : [function (x) { return x; }]
 }
 
+
 function advance_slice_state(lhsv, procname, rhsvs) {
     var in_slice = false;
     for (var i = 0; i < rhsvs.length; i++) {
@@ -83,6 +84,15 @@ function dump_slice() {
     return shred.dump_stmt_list(SLICE_STATE.slice); 
 }
 
+function reset_slice_state() {
+    SLICE_START_VAR = "";
+    SLICE_STATE = {
+        slice_variables : [],
+        slice : [],
+        depk : [function (x) { return x; }]
+    }
+}
+
 function sliced(name, trace_proc) {
     var call = function () {
         var call_vars = [];
@@ -102,7 +112,6 @@ function sliced(name, trace_proc) {
     return call;
 }
 
-synth_builtins = bt.synthesize_builtins(retraced, fwdsliced, []);
 synth_builtins = bt.synthesize_builtins(retraced, sliced, []);
 module.exports = synth_builtins.exports;
 module.exports.__annotations__ = synth_builtins.exports.__annotations__;
@@ -117,3 +126,6 @@ module.exports.dump_trace = shred.dump_trace;
 module.exports.set_slice_from = set_slice_from;
 module.exports.bwd_slice_of = bwd_slice_of;
 module.exports.dump_slice  = dump_slice;
+module.exports.reset_slice_state  = reset_slice_state;
+
+module.exports.state = SLICE_STATE;
