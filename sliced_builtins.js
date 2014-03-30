@@ -30,6 +30,8 @@ function advance_slice_state(lhsv, procname, rhsvs) {
     if (in_slice) {
         SLICE_STATE.slice_variables.unshift(lhsv);
         SLICE_STATE.slice.push([lhsv, procname, rhsvs]);
+    } else {
+
     }
 }
 
@@ -86,11 +88,9 @@ function dump_slice() {
 
 function reset_slice_state() {
     SLICE_START_VAR = "";
-    SLICE_STATE = {
-        slice_variables : [],
-        slice : [],
-        depk : [function (x) { return x; }]
-    }
+    SLICE_STATE.slice_variables = [];
+    SLICE_STATE.slice = [];
+    SLICE_STATE.depk =[ function (x) {return x; } ];
 }
 
 function sliced(name, trace_proc) {
