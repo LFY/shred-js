@@ -83,7 +83,7 @@ function bwd_slice_of(vs) {
 }
 
 function dump_slice() { 
-    return shred.dump_stmt_list(SLICE_STATE.slice); 
+    return shred.dump_stmt_list(SLICE_STATE.slice, true); 
 }
 
 function reset_slice_state() {
