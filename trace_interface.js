@@ -128,6 +128,13 @@ function gen_slice(all_stmts, xrp_stmt) {
     return deep_copy(slice_cxt.state.slice);
 }
 
+function delim(s, xs) {
+    if (xs.length == 0) { return ""; }
+    if (xs.length == 1) { return xs[0] ; }
+    else {
+        return xs[0] + s + delim(s, xs.slice(1, xs.length));
+    }
+}
 function get_slices() {
 
     var all_stmts = deep_copy(shred_cxt.trace_buffer);
