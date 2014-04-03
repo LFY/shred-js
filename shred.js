@@ -26,14 +26,17 @@ var append_trace_buffer = function (resvar, proc, arg_vars) {
     trace_buffer.push([resvar, proc, arg_vars]);
 }
 
-function js_stmt_dump(stmt) {
+function js_stmt_dump(stmt, scoped) {
     var lhsvar = stmt[0];
     var procname = stmt[1];
     var args = stmt[2];
 
     var nargs = args.length;
 
-    var res = "var ";
+    var res = "";
+    if (!scoped) {
+        res += "var ";
+    }
     res += lhsvar;
     res += " = " + procname + "(";
 
@@ -171,12 +174,12 @@ function untraced_if(c, t, e) {
 module.exports._if = untraced_if;
 
 
-function dump_stmt_list(stmts) {
+function dump_stmt_list(stmts, opt) {
     res = "";
     var nstmts = stmts.length;
 
     for (var i = 0; i < nstmts; i++) {
-        res += dump_stmt(stmts[i]);
+        res += dump_stmt(stmts[i], opt);
     }
 
     return res;
@@ -186,7 +189,7 @@ module.exports.dump_stmt_list = dump_stmt_list
 
 // dump_trace: Print the trace.
 function dump_trace() {
-    dump_stmt_list(trace_buffer);
+    dump_stmt_list(trace_buffer, false);
     return res;
 }
 
