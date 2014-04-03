@@ -154,19 +154,34 @@ function get_slices() {
 
     var all_stmts = deep_copy(shred_cxt.trace_buffer);
 
+    var code = "";
+
+    code += shred_cxt.dump_stmt_list(shred_cxt.trace_buffer, false);
+
     var xrps = all_xrp_stmts(shred_cxt.trace_buffer);
 
+    code += make_var("slices", array_def());
+
     var slices = [];
-    // for (var i = 0; i < xrps.length; i++) {
+    var slice_names = [];
     for (var i = 0; i < xrps.length; i++) {
         slices.push(gen_slice(all_stmts, xrps[i]));
+        slice_names.push("SLICE" + i);
     }
 
-    // for (var i = 0; i < slices.length; i++) {
-    //     console.log("SLICE");
-    //     console.log(shred_cxt.dump_stmt_list(slices[i]));
-    // }
-    return slices;
+    for (var i = 0; i < slices.length; i++) {
+        code += start_func_def(slice_names[i], []);
+        code += shred_cxt.dump_stmt_list(slices[i], true);
+        code += end_func_def();
+        code += make_stmt(method_def("slices", "push", [slice_names[i]]));
+    }
+
+    code += make_stmt("slices");
+    var res;
+    with(score_cxt) {
+        res = eval(code);
+    }
+    return res;
 }
 
 module.exports.get_slices = get_slices;
