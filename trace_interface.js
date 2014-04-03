@@ -8,6 +8,7 @@ _ = require("underscore");
 
 shred_cxt = require("./shred"); 
 
+score_cxt = require("./webchurch/church_builtins");
 trace_cxt = require("./traced_builtins");
 retrace_cxt = require("./retraced_builtins");
 deforest_cxt = require("./deforest_builtins");
