@@ -135,6 +135,21 @@ function delim(s, xs) {
         return xs[0] + s + delim(s, xs.slice(1, xs.length));
     }
 }
+
+// A code generator
+function start_func_def(name, vars) { return "function " + name + "(" + delim(", ", vars) + "){\n"; }
+function end_func_def() { return "}\n"; }
+function make_var(v, s) { return "var " + v + " = " + s + ";\n"; }
+function array_def() { 
+    arr = [];
+    for (var i = 0; i < arguments.length; i++) { arr.push(arguments[i]); }
+    return "[" + delim(", ", arr) + "]";
+}
+function make_stmt(s) { return s + ";" ; }
+function call_def(func, call_args) { return func + "(" + delim(", ", call_args) + ")"; }
+function method_def(ob, func, call_args) { return ob + "." + func + "(" + delim(", ", call_args) + ")"; }
+function lam_def(vars, call) { return "function (" + delim(", ", vars) + ") { return " + call + "; }"; }
+
 function get_slices() {
 
     var all_stmts = deep_copy(shred_cxt.trace_buffer);
