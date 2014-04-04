@@ -5,3 +5,5 @@
 *.out
 *.out.js
 *.out.*
+node_modules
+node_modules_old
