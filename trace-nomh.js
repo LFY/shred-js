@@ -1,5 +1,5 @@
 
-__pr = require("./probabilistic/index"); __pr.openModule(__pr);
+__pr = require("./webchurch/probabilistic-js/probabilistic/index"); __pr.openModule(__pr);
 __ch = require("./deforest_builtins"); __pr.openModule(__ch);
 __int = require("./trace_interface");
 var X0 = _const(3.141592653589793);
