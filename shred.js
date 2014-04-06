@@ -12,6 +12,13 @@ var debug_print = function (x) {
 var var_ctr = 0;
 
 module.exports.reset_var_ctr = function () { var_ctr = 0; }
+module.exports.reset_trace_state = function () {
+ while (module.exports.trace_buffer.length > 0) {
+    module.exports.trace_buffer.pop();
+  }
+  module.exports.reset_var_ctr();
+
+}
 
 var seq_var_gen = function () {
     var res_var = "X" + (var_ctr.toString());
