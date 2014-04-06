@@ -1,6 +1,6 @@
 echo "Tracing semantics...\n"
 python generate_preamble.py ./traced_builtins test-nomh.js
-./church test-nomh.church >> test-nomh.js
+./runchurch test-nomh.church >> test-nomh.js
 echo "console.log(dump_trace());" >> test-nomh.js
 
 echo "Direct trace semantics...\n"
