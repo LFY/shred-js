@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>WebChurch</title>
+    <link rel="stylesheet" href="../css/codemirror.css">
+    <link rel="stylesheet" href="../css/d3.css">
+    <script src="store.js"></script>
+    <script src="jquery.js"></script>
+    <script src="webchurch.js"></script>
+    <style>
+      body {
+      font-family: Helvetica;
+      font-size: 120%;
+      }
+
+      button {
+      font-size: 14px
+      }
+
+      select {
+      font-size: 20px;
+      }
+      ul {
+      font-size: 12px
+      }
+      li code {
+      border: 1px solid #aaa;
+      border-radius: 2px;
+      padding: 1px 3px 1px 3px;
+      background-color: #dfdfdf
+      }
+      li {
+      padding-top: 10px
+      }
+    </style>
+    
+  </head>
+  <body>
+    <h1>WebChurch</h1>
+
+    Keyboard shortcuts:
+    <ul>
+      <li> <code>Cmd + .</code> or <code>Ctrl + .</code> - Fold selected section (slightly buggy right now)</li>
+      <li> <code>Cmd + ;</code> or <code>Ctrl + ;</code> - Comment selection section</li>
+    </ul>
+    
+    
+    <pre id="codebox"><code>(hist (list 'a 'a 'a 'b 'c 'c 'c 'c 'd 'd))
+(density (repeat 200 gaussian) 'gaussian true)
+
+(lineplot (repeat 50 (lambda () (repeat 2 gaussian))))
+
+(barplot '((a b c)
+           (5 3 9)
+           ))
+
+(plus 5 3)</code></pre>
+
+  </body>
+  <script>
+    var savedCode = store.get('code');
+    var defaultText = savedCode || $("#codebox > code").text();
+
+    require('./editor').injector($("#codebox")[0],
+    {
+    defaultText: defaultText,
+    defaultEngine: "webchurch",
+    onRunStart: function(editor) {
+    store.set('code', editor.getValue());
+    }
+    }
+    );
+
+  </script>
+</html>
