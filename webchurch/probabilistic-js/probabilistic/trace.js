@@ -4,16 +4,99 @@ var util = require("./util")
 Callsite name management
 */
 
+// Different version with simplified address naming.
+
 var idstack = [""]
-function enterfn(id) { idstack.push(idstack[idstack.length-1] + ":" + id) }
-function leavefn(id) { idstack.pop() }
-//Return the current structural name, as determined by the interpreter stack and loop counters of the trace:
-function currentName(trace){
-    var id = idstack[idstack.length-1]
-    var loopnum = trace.loopcounters[id] || 0
-    trace.loopcounters[id] = loopnum + 1
-	return id + ":" + loopnum
+var curr_addr = []
+
+function enterfn(id) { 
+    idstack.push(idstack[idstack.length-1] + ":" + id) ;
+    curr_addr.push(id);
 }
+
+function leavefn(id) { 
+    idstack.pop();
+    curr_addr.pop();
+}
+
+// Run length encoding.
+function run_length(xs) {
+    var loop = function(rst, curr, ct, acc) {
+        console.log([rst, curr, ct, acc]);
+        if (rst.length == 0) {
+            return acc.concat([[curr, ct]]);
+        }
+
+        var next_val = rst[0];
+
+        var next_acc;
+        var next_curr;
+        var next_ct;
+
+        if (next_val != curr) {
+            next_curr = next_val;
+            next_ct = 1;
+            next_acc = acc.concat([[curr, ct]]);
+        } else {
+            next_curr = curr;
+            next_ct = ct + 1;
+            next_acc = acc;
+        }
+
+        return loop(rst.slice(1, rst.length), 
+                next_curr,
+                next_ct,
+                next_acc);
+    }
+
+    return loop(xs.slice(1,xs.length), xs[0], 1, []);
+}
+
+// Hashing to a string. And you might as well store the mapping back to the original list.
+function rl_addr_string_hash(rl_addr) {
+    var res_str = "(";
+    console.log('rladdr');
+    console.log(rl_addr);
+    for (var i = 0; i < rl_addr.length; i++) {
+        var cell = rl_addr[i];
+        var addr = cell[0];
+        var len = cell[1];
+        var addrlen = addr.toString() + "^" + len.toString();
+        res_str += addrlen;
+        if (i < rl_addr.length - 1) {
+            res_str += ", ";
+        } 
+    }
+    res_str += ")";
+
+    var res = {};
+    res[res_str] = rl_addr;
+    return res;
+}
+
+// Return the current structural name, as determined by the interpreter stack and loop counters of the trace:
+function currentName(trace){
+    // var id = idstack[idstack.length-1]
+    // var loopnum = trace.loopcounters[id] || 0
+    // trace.loopcounters[id] = loopnum + 1
+	// return id + ":" + loopnum
+
+    var res = [];
+    var rl_addr = run_length(curr_addr);
+    var name_map = rl_addr_string_hash(rl_addr);
+
+    for (k in name_map) {
+        return k;
+    }
+}
+
+//Return the current structural name, as determined by the interpreter stack and loop counters of the trace:
+// function currentName(trace){
+//     var id = idstack[idstack.length-1]
+//     var loopnum = trace.loopcounters[id] || 0
+//     trace.loopcounters[id] = loopnum + 1
+// 	return id + ":" + loopnum
+// }
 
 
 /*
