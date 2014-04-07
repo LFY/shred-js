@@ -1,11 +1,12 @@
 
 __pr = require("./webchurch/probabilistic-js/probabilistic/index"); __pr.openModule(__pr);
-__ch = require("./traced_builtins"); __pr.openModule(__ch);
+__ch = require("./webchurch/church_builtins"); __pr.openModule(__ch);
+__tr = require("./traced_builtins");
 __int = require("./trace_interface");
-sh = require("./shred");
+__sh = require("./shred");
 
 function test_nfqp_0() {
-    sh.reset_trace_state();
+    __sh.reset_trace_state();
     var S = function () {
         enterfn(0);
         var call0 = wrapped_flip();
@@ -39,7 +40,7 @@ function test_nfqp_0() {
 }
 
 function test_nfqp_1() {
-    sh.reset_trace_state();
+    __sh.reset_trace_state();
     var S = function () {
         enterfn(0);
         var call0 = wrapped_flip();
@@ -96,3 +97,6 @@ function explore_worldgraph(wg, num_iter, proc) {
 
 explore_worldgraph(wg, 10, test_nfqp_1);
 console.log(JSON.stringify(wg.transitions));
+
+var mh_samples = traceMH(test_nfqp_0, 10, 10, true, undefined);
+console.log(mh_samples)

@@ -7,7 +7,7 @@ Callsite name management
 // Different version with simplified address naming.
 
 var idstack = [""]
-var curr_addr = []
+var curr_addr = ["top"]
 
 function enterfn(id) { 
     idstack.push(idstack[idstack.length-1] + ":" + id) ;
@@ -22,7 +22,7 @@ function leavefn(id) {
 // Run length encoding.
 function run_length(xs) {
     var loop = function(rst, curr, ct, acc) {
-        console.log([rst, curr, ct, acc]);
+        // console.log([rst, curr, ct, acc]);
         if (rst.length == 0) {
             return acc.concat([[curr, ct]]);
         }
@@ -52,11 +52,13 @@ function run_length(xs) {
     return loop(xs.slice(1,xs.length), xs[0], 1, []);
 }
 
-// Hashing to a string. And you might as well store the mapping back to the original list.
+// Hashing RLE'd addresses to a string. And you might as well store the mapping
+// back to the original list.
+
 function rl_addr_string_hash(rl_addr) {
     var res_str = "(";
-    console.log('rladdr');
-    console.log(rl_addr);
+    // console.log('rladdr');
+    // console.log(rl_addr);
     for (var i = 0; i < rl_addr.length; i++) {
         var cell = rl_addr[i];
         var addr = cell[0];
@@ -69,9 +71,7 @@ function rl_addr_string_hash(rl_addr) {
     }
     res_str += ")";
 
-    var res = {};
-    res[res_str] = rl_addr;
-    return res;
+    return [res_str, rl_addr];
 }
 
 // Return the current structural name, as determined by the interpreter stack and loop counters of the trace:
@@ -84,10 +84,14 @@ function currentName(trace){
     var res = [];
     var rl_addr = run_length(curr_addr);
     var name_map = rl_addr_string_hash(rl_addr);
+    var addr_name = name_map[0];
 
-    for (k in name_map) {
-        return k;
-    }
+    var loopnum = trace.loopcounters[addr_name] || 0;
+    trace.loopcounters[addr_name] = loopnum + 1;
+
+    var final_name = addr_name + "." + loopnum.toString(); 
+
+    return final_name;
 }
 
 //Return the current structural name, as determined by the interpreter stack and loop counters of the trace:
