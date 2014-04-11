@@ -2631,6 +2631,6 @@ function orig_nfqp() {
     return sample;
 }
 
-// var mh_samples = traceMH(nfqp, 10, 100, true, undefined);
-var mh_samples = traceMH(orig_nfqp, 10, 100, true, undefined);
+var mh_samples = traceMH(nfqp, 10, 100, true, undefined);
+// var mh_samples = traceMH(orig_nfqp, 10, 100, true, undefined);
 console.log(mh_samples);
