@@ -95,7 +95,7 @@ module.exports.dump_stmt = js_stmt_dump;
 // Constructor
 
 var make_cell = function (var_, val) { return [var_, val]; }
-var cell_ret = function (val) { return [next_var(), val] }
+var cell_ret = function (val) { return [next_var(curr_addr()), val] }
 
 // Accessors
 
@@ -119,6 +119,9 @@ function shred(name, proc) {
         debug_print(proc);
         debug_print(arguments);
 
+        // Address
+        var address = curr_addr();
+
         var num_args = arguments.length;
 
         var vars = [];
@@ -136,7 +139,8 @@ function shred(name, proc) {
         var retval = proc.apply(this, vals);
         debug_print("retval");
         debug_print(retval);
-        var retvar = next_var();
+
+        var retvar = next_var(address);
         add_stmt(retvar, name, vars);
         return [retvar, retval];
     }
