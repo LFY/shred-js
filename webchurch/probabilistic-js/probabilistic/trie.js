@@ -65,6 +65,9 @@ function list2trie(xs, v) {
 
 
 function test() {
+// Tests------------------------------------------------------------------------
+
+function test_tries() {
     var test_trie = list2trie([0, 1, 2], "A");
     console.log(JSON.stringify(test_trie));
 }
