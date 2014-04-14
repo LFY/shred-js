@@ -51,6 +51,8 @@ _export("trie_nodep", trie_nodep);
 _export("trie_node_head", trie_node_head);
 _export("trie_node_subtries", trie_node_subtries);
 
+// construction primitive-------------------------------------------------------
+
 function list2trie(xs, v) {
     if (xs.length == 0) {
         return trie_leaf(v);
