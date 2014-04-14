@@ -1,4 +1,5 @@
 var util = require("./util");
+var trie = require("./trie");
 
 function disp_addrval_string(addrs, vals) {
 	console.log("Addr-vals:");
@@ -29,17 +30,27 @@ WorldGraph.prototype.update_transitions = function update_transitions(addr_vals)
     var trs = this.transitions;
 
     for (var i = 0; i < addrs.length; i++) {
-        var current = trs[addrs[i]];
-        if (current == undefined) {
-            trs[addrs[i]] = {};
-            current = trs[addrs[i]];
-        }
-        if (i == addrs.length - 1) {
-            current[vals[i]] = "HALT";
+        if (trs == undefined) {
+            this.transitions = trie.list2trie(addrs, "HALT");
         } else {
-            current[vals[i]] = addrs[i + 1];
+            var addrs_up_to = addrs.slice(0, i + 1);
+            var the_val = vals[i];
+            trie.trie_update(addrs_up_to, function (old) { return the_val; }, this.transitions);
         }
     }
+
+    // for (var i = 0; i < addrs.length; i++) {
+    //     var current = trs[addrs[i]];
+    //     if (current == undefined) {
+    //         trs[addrs[i]] = {};
+    //         current = trs[addrs[i]];
+    //     }
+    //     if (i == addrs.length - 1) {
+    //         current[vals[i]] = "HALT";
+    //     } else {
+    //         current[vals[i]] = addrs[i + 1];
+    //     }
+    // }
 	this.time++;
 }
 
@@ -66,7 +77,7 @@ function WorldGraph(initial_trace) {
 		this.traces = [initial_trace.deepcopy()];
 	}
 
-	this.transitions = {};
+	this.transitions = undefined;
 	this.time = 0;
 
 	for (i in this.traces) {
