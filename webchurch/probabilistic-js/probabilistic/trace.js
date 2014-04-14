@@ -487,6 +487,7 @@ module.exports =
 {
 	enterfn: enterfn,
 	leavefn: leavefn,
+    currentName: currentName,
 //    setmaxid: setmaxid,
 	lookupVariableValue: lookupVariableValue,
 	newTrace: newTrace,
