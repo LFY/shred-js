@@ -5,7 +5,7 @@ module.exports = {};
 // data Trie k v = 
 //      TrieRoot [Trie k v] | TrieLeaf v | TrieNode k [Trie k v]
 
-// constructors
+// Constructors-----------------------------------------------------------------
 
 function trie_root(ts) {
     return { tag : "trie_root", ts : ts };
@@ -29,7 +29,7 @@ var start_trie = function () { return trie_root([]) };
 
 module.exports.start_trie = start_trie();
 
-// predicates and accessors-----------------------------------------------------
+// Predicates and accessors-----------------------------------------------------
 
 var _export = function (n, f) { module.exports[n] = f; };
 
@@ -51,7 +51,7 @@ _export("trie_nodep", trie_nodep);
 _export("trie_node_head", trie_node_head);
 _export("trie_node_subtries", trie_node_subtries);
 
-// construction primitive-------------------------------------------------------
+// Construction primitive-------------------------------------------------------
 
 function list2trie(xs, v) {
     if (xs.length == 0) {
