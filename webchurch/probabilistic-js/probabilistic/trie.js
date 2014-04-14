@@ -29,6 +29,28 @@ var start_trie = function () { return trie_root([]) };
 
 module.exports.start_trie = start_trie();
 
+// predicates and accessors-----------------------------------------------------
+
+var _export = function (n, f) { module.exports[n] = f; };
+
+var trie_rootp = function (t) { return (t.tag == "trie_root"); };
+var trie_root_subtries = function (t) { return t.ts; };
+
+var trie_leafp = function (t) { return (t.tag == "trie_leaf"); };
+var trie_leaf_value = function (t) { return t.v; };
+
+var trie_nodep = function (t) { return (t.tag == "trie_node"); };
+var trie_node_head = function (t) { return t.k; };
+var trie_node_subtries = function (t) { return t.ts; };
+
+_export("trie_rootp", trie_rootp);
+_export("trie_root_subtries", trie_root_subtries);
+_export("trie_leafp", trie_leafp);
+_export("trie_leaf_value", trie_leaf_value);
+_export("trie_nodep", trie_nodep);
+_export("trie_node_head", trie_node_head);
+_export("trie_node_subtries", trie_node_subtries);
+
 function list2trie(xs, v) {
     if (xs.length == 0) {
         return trie_leaf(v);
