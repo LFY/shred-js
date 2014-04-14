@@ -6,7 +6,7 @@ Callsite name management
 
 // Different version with simplified address naming.
 
-var idstack = [""]
+var idstack = ["top"]
 var curr_addr = ["top"]
 
 function enterfn(id) { 
@@ -56,20 +56,20 @@ function run_length(xs) {
 // back to the original list.
 
 function rl_addr_string_hash(rl_addr) {
-    var res_str = "(";
+    var res_str = "";
     // console.log('rladdr');
     // console.log(rl_addr);
     for (var i = 0; i < rl_addr.length; i++) {
         var cell = rl_addr[i];
         var addr = cell[0];
         var len = cell[1];
-        var addrlen = addr.toString() + "^" + len.toString();
+        var addrlen = addr.toString() + "e" + len.toString();
         res_str += addrlen;
         if (i < rl_addr.length - 1) {
-            res_str += ", ";
+            res_str += "_";
         } 
     }
-    res_str += ")";
+    res_str += "";
 
     return [res_str, rl_addr];
 }
@@ -90,7 +90,7 @@ function currentName(trace){
     var loopnum = trace.loopcounters[addr_name] || 0;
     trace.loopcounters[addr_name] = loopnum + 1;
 
-    var final_name = addr_name + "." + loopnum.toString(); 
+    var final_name = addr_name + "l" + loopnum.toString(); 
 
     return final_name;
 }
