@@ -144,12 +144,35 @@ function trie_lkup(key, trie) {
     }
 }
 
+// update primitives------------------------------------------------------------
+
+function trie_write(k, v, t) {
+    var i = 0;
+    var curr = t;
+    while(i < k.length) {
+        curr = trie_step(k[i], curr);
+        i++;
+    }
+
+    curr.ts.unshift(v);
+    return t;
+}
+
+function trie_update(k, f, t) {
+    return trie_write(k, f(trie_lkup(k, t)), t);
+}
+
 // Tests------------------------------------------------------------------------
 
 function test_tries() {
     var test_trie = list2trie([0, 1, 2], "A");
     console.log(JSON.stringify(test_trie));
     console.log(JSON.stringify(trie_lkup([0, 1, 2], test_trie)));
+
+    console.log(test_trie);
+    console.log(JSON.stringify(trie_write([0, 1], "C", test_trie)));
+
+    console.log(JSON.stringify(trie_update([0,1], function (old) { return "D"; }, test_trie)));
+    console.log(JSON.stringify(trie_update([0,1], function (old) { return "E"; }, test_trie)));
 }
 
-test_tries();
