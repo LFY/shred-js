@@ -231,7 +231,7 @@ function traced_if(c, t, e) {
 
     set_default_val(bcells, cvar, {});
 
-    bcells["cond"] = deep_copy(bstack);
+    bcells[cvar]["cond"] = deep_copy(bstack);
 
     set_default_val(bcells[cvar], "then", "uneval");
     set_default_val(bcells[cvar], "else", "uneval");
@@ -245,6 +245,8 @@ function traced_if(c, t, e) {
         else_res_var = var_of(res_cell);
         bcells[cvar]["else"] = else_res_var;
     }
+
+    bstack.pop();
 
     var addr = curr_addr();
     var res_var = "PHI_" + next_var(addr);
