@@ -63,6 +63,8 @@ function list2trie(xs, v) {
     }
 }
 
+_export("list2trie", list2trie);
+
 // Movement primitives----------------------------------------------------------
 
 // trie_step: k -> Trie k v -> Trie k v
@@ -93,6 +95,7 @@ function trie_step(k, t) {
     }
 }
 
+_export("trie_step", trie_step);
 
 // lookup primitive-------------------------------------------------------------
 
@@ -144,6 +147,8 @@ function trie_lkup(key, trie) {
     }
 }
 
+_export("trie_lkup", trie_lkup);
+
 // update primitives------------------------------------------------------------
 
 function trie_write(k, v, t) {
@@ -158,9 +163,13 @@ function trie_write(k, v, t) {
     return t;
 }
 
+_export("trie_write", trie_write);
+
 function trie_update(k, f, t) {
     return trie_write(k, f(trie_lkup(k, t)), t);
 }
+
+_export("trie_update", trie_update);
 
 // Tests------------------------------------------------------------------------
 
@@ -175,4 +184,5 @@ function test_tries() {
     console.log(JSON.stringify(trie_update([0,1], function (old) { return "D"; }, test_trie)));
     console.log(JSON.stringify(trie_update([0,1], function (old) { return "E"; }, test_trie)));
 }
+
 
