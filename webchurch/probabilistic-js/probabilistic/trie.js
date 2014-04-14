@@ -63,12 +63,62 @@ function list2trie(xs, v) {
     }
 }
 
+// lookup primitive-------------------------------------------------------------
 
-function test() {
+function nullp(xs) { return xs.length == 0; }
+function rest(xs) { return xs.slice(1, xs.length); }
+
+function trie_lkup(key, trie) {
+    // console.log(JSON.stringify([key,trie]));
+    if (nullp(key)) {
+        if (trie_leafp(trie)) { 
+            // console.log("leaf-case2"); 
+            return trie_leaf_value(trie); 
+        }
+        if (trie_rootp(trie)) { 
+            // console.log("root-case2");
+            var t = trie_root_subtries(trie)[0]; 
+            return trie_lkup(key, t); 
+        }
+    } else {
+        if (trie_leafp(trie)) {
+            // console.log("leaf-case"); 
+            return undefined; 
+        }
+        if (trie_rootp(trie) && nullp(trie_root_subtries(trie))) {
+            // console.log("root-case");
+            return undefined; 
+        } else if (trie_rootp(trie)) {
+            // console.log("root-case-1");
+            var res = trie_lkup(key, trie_root_subtries(trie)[0]);
+            if (res == undefined) {
+                // console.log("undef-case");
+                return trie_lkup(key, trie_root(rest(trie_root_subtries(trie))));
+            } else {
+                // console.log("def-case");
+                return res;
+            }
+        } else if (trie_nodep(trie)) {
+            // console.log("@ node");
+            var y = trie_node_head(trie);
+            var x = key[0];
+            if (x == y) {
+                // console.log("match");
+                return trie_lkup(rest(key), trie_root(trie_node_subtries(trie)));
+            } else {
+                // console.log("mismatch");
+                return undefined;
+            }
+        }
+    }
+}
+
 // Tests------------------------------------------------------------------------
 
 function test_tries() {
     var test_trie = list2trie([0, 1, 2], "A");
     console.log(JSON.stringify(test_trie));
+    console.log(JSON.stringify(trie_lkup([0, 1, 2], test_trie)));
 }
 
+test_tries();
