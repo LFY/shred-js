@@ -247,7 +247,7 @@ function traced_if(c, t, e) {
     }
 
     var addr = curr_addr();
-    var res_var = "PHI" + next_var(addr);
+    var res_var = "PHI_" + next_var(addr);
     var ret_cell = make_cell(res_var, val_of(res_cell));
 
     add_stmt(res_var, "ifte", [cvar, bcells[cvar]["then"], bcells[cvar]["else"]]);
