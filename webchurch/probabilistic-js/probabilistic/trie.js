@@ -88,7 +88,6 @@ function trie_step(k, t) {
                 return trie_step(k, ss[i]);
             }
         }
-
         return undefined;
     } else {
         return t;
