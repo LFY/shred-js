@@ -186,6 +186,8 @@ function const_(cval) {
 
 module.exports._const = const_;
 
+// Branches---------------------------------------------------------------------
+
 // untraced_if: Trace through if-statements, ignoring them.
 
 function untraced_if(c, t, e) {
@@ -199,8 +201,63 @@ function untraced_if(c, t, e) {
     }
 }
 
-module.exports._if = untraced_if;
 
+var bstack = [];
+var bcells = {};
+
+
+function set_default_val(d, k, v) {
+    if (d[k] == undefined) {
+        d[k] = v;
+        return;
+    } else {
+        return;
+    }
+}
+
+// traced_if: almost an oxymoron
+
+function deep_copy(obj) { return JSON.parse(JSON.stringify(obj)); }
+
+function traced_if(c, t, e) {
+    var cvar = var_of(c);
+    var cval = val_of(c);
+
+    bstack.push([cvar, cval]);
+
+    var res_cell;
+    var then_res_var = "uneval";
+    var else_res_var = "uneval";
+
+    set_default_val(bcells, cvar, {});
+
+    bcells["cond"] = deep_copy(bstack);
+
+    set_default_val(bcells[cvar], "then", "uneval");
+    set_default_val(bcells[cvar], "else", "uneval");
+  
+    if (cval) {
+        res_cell = t();
+        then_res_var = var_of(res_cell);
+        bcells[cvar]["then"] = then_res_var;
+    } else {
+        res_cell = e();
+        else_res_var = var_of(res_cell);
+        bcells[cvar]["else"] = else_res_var;
+    }
+
+    var addr = curr_addr();
+    var res_var = "PHI" + next_var(addr);
+    var ret_cell = make_cell(res_var, val_of(res_cell));
+
+    add_stmt(res_var, "ifte", [cvar, bcells[cvar]["then"], bcells[cvar]["else"]]);
+
+    return ret_cell;
+}
+
+module.exports._if = traced_if;
+
+// Trace output-----------------------------------------------------------------
 
 function dump_stmt_list(stmts, opt) {
     res = "";
