@@ -151,7 +151,9 @@ function RandomExecutionTrace(computation, init)
 		{
 			this.reset()
 		}
-	} else if (init=="enumerate") {
+	} else if (init == "nothing") {
+        // literally do nothing except exist
+    } else if (init=="enumerate") {
         this.enumerate=true
         this.traceUpdate()
         this.enumerate=false
