@@ -105,6 +105,14 @@ var val_of = function (x) { if (x == undefined) { return x; } else { return x[1]
 // shred: Transform a given primitive PROC with NUM_ARGS arguments into a
 // traced version that has name NAME
 
+var curr_addr = function () {
+    var res = undefined;
+    if (trace_cell.trace != undefined) {
+        res = currentName(trace_cell.trace);
+    }
+    return res;
+}
+
 function shred(name, proc) {
     function call() {
         debug_print("call " + name);
