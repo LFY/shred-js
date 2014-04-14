@@ -74,6 +74,7 @@ function rl_addr_string_hash(rl_addr) {
     return [res_str, rl_addr];
 }
 
+
 // Return the current structural name, as determined by the interpreter stack and loop counters of the trace:
 function currentName(trace){
     // var id = idstack[idstack.length-1]

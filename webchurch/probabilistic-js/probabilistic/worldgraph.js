@@ -29,13 +29,21 @@ WorldGraph.prototype.update_transitions = function update_transitions(addr_vals)
 
     var trs = this.transitions;
 
-    if (trs == undefined) {
-        this.transitions = trie.trie_root(trie.list2trie(vals, "HALT_ADDR").ts);
-    } else {
-        trie.trie_update(vals, function (old) { return addrs; }, this.transitions);
+    for (var i = 0; i < addrs.length; i++) {
+        if (trs == undefined) {
+            this.transitions = trie.trie_root(trie.list2trie(vals, "HALT_ADDR").ts)
+        } else {
+            var addrs_up_to = addrs.slice(0, i + 1);
+            var vals_up_to = vals.slice(0, i + 1);
+            var k = _.map(_.zip(addrs_up_to, vals_up_to), function (av) {
+                return av[0] + ":" + av[1].toString();
+            });
+
+            trie.trie_update(k, function (old) { if (i < addrs.length - 1) { return addrs[i + 1]; } else { return "HALT"; }}, this.transitions);
+        }
     }
 
-    this.time++;
+	this.time++;
 }
 
 // Function to incorporate one trace. Worldgraph transitions are then based
