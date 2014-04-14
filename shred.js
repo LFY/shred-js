@@ -24,10 +24,15 @@ module.exports.reset_trace_state = function () {
 
 }
 
-var seq_var_gen = function () {
-    var res_var = "X" + (var_ctr.toString());
-    var_ctr += 1;
-    return res_var;
+var seq_var_gen = function (arg) {
+    if (arg == undefined) {
+        var res_var = "X" + (var_ctr.toString());
+        var_ctr += 1;
+        return res_var;
+    } else {
+        var res_var = "X" + arg.toString();
+        return res_var;
+    }
 }
 
 var trace_buffer = [];
