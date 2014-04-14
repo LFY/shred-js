@@ -155,11 +155,17 @@ function trie_write(k, v, t) {
     var i = 0;
     var curr = t;
     while(i < k.length) {
-        curr = trie_step(k[i], curr);
-        i++;
+        var next = trie_step(k[i], curr);
+        if (next == undefined) {
+            curr.ts.unshift(trie_node(k[i], []));
+        } else {
+            curr = next;
+            i++;
+        }
     }
 
-    curr.ts.unshift(v);
+    if (curr.ts.length > 0 && v == curr.ts[0].v) { return t; }
+    curr.ts.unshift(trie_leaf(v));
     return t;
 }
 
@@ -183,6 +189,7 @@ function test_tries() {
 
     console.log(JSON.stringify(trie_update([0,1], function (old) { return "D"; }, test_trie)));
     console.log(JSON.stringify(trie_update([0,1], function (old) { return "E"; }, test_trie)));
+    console.log(JSON.stringify(trie_update([0,3], function (old) { return "F"; }, test_trie)));
 }
 
 
