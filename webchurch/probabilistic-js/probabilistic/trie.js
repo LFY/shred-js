@@ -63,6 +63,37 @@ function list2trie(xs, v) {
     }
 }
 
+// Movement primitives----------------------------------------------------------
+
+// trie_step: k -> Trie k v -> Trie k v
+// think derivative of a data type
+
+function trie_step(k, t) {
+    if (trie_nodep(t)) {
+        var y = trie_node_head(t);
+        if (y == k) {
+            var next = trie_root(trie_node_subtries(t));
+            return next;
+        } else {
+            return undefined;
+        }
+    } else if (trie_rootp(t)) {
+        var ss = trie_root_subtries(t);
+
+        for (var i = 0; i < ss.length; i++) {
+            // return the first matching node
+            if (trie_nodep(ss[i]) && trie_node_head(ss[i]) == k) {
+                return trie_step(k, ss[i]);
+            }
+        }
+
+        return undefined;
+    } else {
+        return t;
+    }
+}
+
+
 // lookup primitive-------------------------------------------------------------
 
 function nullp(xs) { return xs.length == 0; }
