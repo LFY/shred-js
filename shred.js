@@ -2,6 +2,10 @@
 
 module.exports = {};
 
+// TraceMH object to reference.
+var trace_cell = {};
+module.exports.trace_cell = trace_cell;
+
 var debugp = false;
 module.exports.debug_mode = debugp;
 
