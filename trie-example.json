@@ -1,0 +1,176 @@
+
+{
+  "tag": "trie_root",
+  "ts": [
+    {
+      "tag": "trie_node",
+      "k": "(top^1, 6^1, 0^1).0:1", // address : value
+      "ts": [
+        {
+          "tag": "trie_leaf",
+          "v": "(top^1, 7^1, 0^1).0" // next address
+        },
+        {
+          "tag": "trie_node",
+          "k": "(top^1, 7^1, 0^1).0:1", // next address : value
+          "ts": [
+            {
+              "tag": "trie_leaf",
+              "v": "HALT"
+            }
+          ]
+        },
+        {
+          "tag": "trie_leaf",
+          "v": "(top^1, 7^1, 0^1).0" // duplicated next address I guess (TODO: remove duplicates)
+        },
+        {
+          "tag": "trie_node",
+          "k": "(top^1, 7^1, 0^1).0:0", // next address : value
+          "ts": [
+            {
+              "tag": "trie_leaf",
+              "v": "(top^1, 7^1, 5^1, 3^1, 0^1).0" // next address after that
+            },
+            {
+              "tag": "trie_node",
+              "k": "(top^1, 7^1, 5^1, 3^1, 0^1).0:1", // next address after that : value
+              "ts": [
+                {
+                  "tag": "trie_leaf", // says we're done
+                  "v": "HALT"
+                }
+              ]
+            },
+            {
+              "tag": "trie_leaf",
+              "v": "(top^1, 7^1, 5^1, 3^1, 0^1).0"
+            }
+          ]
+        },
+        {
+          "tag": "trie_leaf",
+          "v": "(top^1, 7^1, 0^1).0"
+        }
+      ]
+    },
+    {
+      "tag": "trie_node",
+      "k": "(top^1, 6^1, 0^1).0:0",
+      "ts": [
+        {
+          "tag": "trie_leaf",
+          "v": "(top^1, 6^1, 5^1, 3^1, 0^1).0"
+        },
+        {
+          "tag": "trie_node",
+          "k": "(top^1, 6^1, 5^1, 3^1, 0^1).0:0",
+          "ts": [
+            {
+              "tag": "trie_node",
+              "k": "(top^1, 6^1, 5^1, 3^1, 5^1, 3^1, 0^1).0:1",
+              "ts": [
+                {
+                  "tag": "trie_node",
+                  "k": "(top^1, 7^1, 0^1).0:0",
+                  "ts": [
+                    {
+                      "tag": "trie_node",
+                      "k": "(top^1, 7^1, 5^1, 3^1, 0^1).0:1",
+                      "ts": [
+                        {
+                          "tag": "trie_leaf",
+                          "v": "HALT"
+                        }
+                      ]
+                    },
+                    {
+                      "tag": "trie_leaf",
+                      "v": "(top^1, 7^1, 5^1, 3^1, 0^1).0"
+                    }
+                  ]
+                },
+                {
+                  "tag": "trie_leaf",
+                  "v": "(top^1, 7^1, 0^1).0"
+                }
+              ]
+            },
+            {
+              "tag": "trie_leaf",
+              "v": "(top^1, 6^1, 5^1, 3^1, 5^1, 3^1, 0^1).0"
+            }
+          ]
+        },
+        {
+          "tag": "trie_leaf",
+          "v": "(top^1, 6^1, 5^1, 3^1, 0^1).0"
+        },
+        {
+          "tag": "trie_node",
+          "k": "(top^1, 6^1, 5^1, 3^1, 0^1).0:1",
+          "ts": [
+            {
+              "tag": "trie_node",
+              "k": "(top^1, 7^1, 0^1).0:0",
+              "ts": [
+                {
+                  "tag": "trie_node",
+                  "k": "(top^1, 7^1, 5^1, 3^1, 0^1).0:1",
+                  "ts": [
+                    {
+                      "tag": "trie_leaf",
+                      "v": "HALT"
+                    }
+                  ]
+                },
+                {
+                  "tag": "trie_leaf",
+                  "v": "(top^1, 7^1, 5^1, 3^1, 0^1).0"
+                }
+              ]
+            },
+            {
+              "tag": "trie_leaf",
+              "v": "(top^1, 7^1, 0^1).0"
+            },
+            {
+              "tag": "trie_node",
+              "k": "(top^1, 7^1, 0^1).0:1",
+              "ts": [
+                {
+                  "tag": "trie_leaf",
+                  "v": "HALT"
+                }
+              ]
+            },
+            {
+              "tag": "trie_leaf",
+              "v": "(top^1, 7^1, 0^1).0"
+            }
+          ]
+        },
+        {
+          "tag": "trie_leaf",
+          "v": "(top^1, 6^1, 5^1, 3^1, 0^1).0"
+        }
+      ]
+    },
+    {
+      "tag": "trie_node",
+      "k": 1,
+      "ts": [
+        {
+          "tag": "trie_node",
+          "k": 1,
+          "ts": [
+            {
+              "tag": "trie_leaf",
+              "v": "HALT_ADDR"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
