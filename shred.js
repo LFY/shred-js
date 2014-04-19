@@ -44,11 +44,20 @@ module.exports.trace_buffer = trace_buffer;
 // var dynamic_ssa = [{br : 'top' t: [.....{ br: ["x3condvar" t : [...], f : [...]}...] } ... etc etc etc 
 // dssa = uneval | [stmt] | {br : stmt t: dssa, f : dssa, join : stmt}
 
+// The dynamic SSA state:
+// buffer: the entire thing
+// cursor: the current dssa object in which evaluation is taking place:
+//  it is allowed three operations:
+//  a. append a statement to the current trace, and also move itself to the list of stmts to append to next.
+//  b. push a branch (var + val) on the stack.
+//  c. join. 
+
 var dssa_buffer = {br : 'top', t : []};
 var dssa_prev_cursor = dssa_buffer;
 var dssa_cursor = dssa_buffer;
 
-var dssa_step_in = function(cond_var, cond_val) {
+
+var dssa_step_in(cond_var, cond_val) {
     dssa_prev_cursor = dssa_cursor;
     dssa_cursor = look_for_branch(dssa_cursor, cond_var, cond_val);
 }
