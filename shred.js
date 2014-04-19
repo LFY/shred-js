@@ -83,8 +83,26 @@ var dssa_append_stmt = function(stmt) {
 }
 
 var dssa_push_branch = function(cond_var, cond_val) {
-    // TODO
     var abstract_val = (cond_val) ? 't' : 'f';
+    // only approximate checks for now
+    var branch_existsp = dssa_cursor.length > dssa_insertion_pt + 1; // assume it exists
+    if (branch_existsp) {
+        var br_obj = dssa_cursor[dssa_insertion_pt];
+        var tf_existsp = br_obj[abstract_val] != undefined;
+        if (tf_existsp) {
+            dssa_cursor = br_obj[abstract_val];
+        } else {
+            br_obj[abstract_val] = [];
+            dssa_cursor = br_obj[abstract_val];
+            dssa_insertion_pt = 0;
+        }
+    } else {
+        var br_obj = {};
+        br_obj.br = cond_var;
+        br_obj[abstract_val] = [];
+        dssa_cursor = br_obj[abstract_val];
+        dssa_insertion_pt = 0;
+    }
 }
 
 var dssa_join = function(phi_stmt) {
