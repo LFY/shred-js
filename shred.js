@@ -50,8 +50,10 @@ var dssa_buffer = {br : 'top', t : []};
 
 // buffer: the entire thing
 // cursor: the current dssa object in which evaluation is taking place:
+// insertion_pt: where to insert statement in the current trace buffer.
 
-var dssa_cursor = dssa_buffer;
+var dssa_cursor = dssa_buffer.t;
+var dssa_insertion_pt = 0;
 
 //  it is allowed three operations:
 
@@ -70,14 +72,24 @@ var dssa_cursor = dssa_buffer;
 var cursor_branchp = function (x) { return x.br != undefined; }
 var cursor_stmtsp = function (x) { return (x instanceof Array); }
 
-var dssa_step_in(cond_var, cond_val) {
-    dssa_prev_cursor = dssa_cursor;
-    dssa_cursor = look_for_branch(dssa_cursor, cond_var, cond_val);
+var dssa_append_stmt = function(stmt) {
+    // supposed to only read?
+    if (dssa_cursor.length > dssa_insertion_pt + 1) {
+        // do nothing
+    } else {
+        dssa_cursor.push(stmt);
+    }
+    dssa_insertion_pt++;
 }
 
-var dssa_lkup = function(bstack) {
-    // No idea what to do...
-};
+var dssa_push_branch = function(cond_var, cond_val) {
+    // TODO
+    var abstract_val = (cond_val) ? 't' : 'f';
+}
+
+var dssa_join = function(phi_stmt) {
+    // TODO
+}
 
 // ///////////////////----------------------------------------------------------
 
