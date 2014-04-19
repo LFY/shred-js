@@ -38,9 +38,34 @@ var seq_var_gen = function (arg) {
 var trace_buffer = [];
 module.exports.trace_buffer = trace_buffer;
 
+// Under construction-----------------------------------------------------------
+// Cursor-based building of dynamic SSA
+
+// var dynamic_ssa = [{br : 'top' t: [.....{ br: ["x3condvar" t : [...], f : [...]}...] } ... etc etc etc 
+// dssa = uneval | [stmt] | {br : stmt t: dssa, f : dssa, join : stmt}
+
+var dssa_buffer = {br : 'top', t : []};
+var dssa_prev_cursor = dssa_buffer;
+var dssa_cursor = dssa_buffer;
+
+var dssa_step_in = function(cond_var, cond_val) {
+    dssa_prev_cursor = dssa_cursor;
+    dssa_cursor = look_for_branch(dssa_cursor, cond_var, cond_val);
+}
+
+var dssa_lkup = function(bstack) {
+    // No idea what to do...
+};
+
+// ///////////////////----------------------------------------------------------
+
 var append_trace_buffer = function (resvar, proc, arg_vars) {
     trace_buffer.push([resvar, proc, arg_vars]);
-}
+};
+
+var append_trace_buffer_with_dssa = function (resvar, proc, arg_vars, stmt_type) {
+    trace_buffer.push([resvar, proc, arg_vars]);
+};
 
 function js_stmt_dump(stmt, scoped) {
     var lhsvar = stmt[0];
@@ -80,7 +105,8 @@ var next_var = seq_var_gen;
 // add_stmt: Support different ways of adding to the trace (critical for doing
 // things like trace graphs).
 
-var add_stmt = append_trace_buffer;
+// var add_stmt = append_trace_buffer;
+var add_stmt = append_trace_buffer_with_dssa;
 
 // dump_stmt: Output format of each trace statement. 
 
@@ -202,7 +228,7 @@ function untraced_if(c, t, e) {
 }
 
 
-var bstack = [];
+var bstack = [["top", true]];
 var bcells = {};
 
 
