@@ -45,17 +45,30 @@ module.exports.trace_buffer = trace_buffer;
 // dssa = uneval | [stmt] | {br : stmt t: dssa, f : dssa, join : stmt}
 
 // The dynamic SSA state:
+//
+var dssa_buffer = {br : 'top', t : []};
+
 // buffer: the entire thing
 // cursor: the current dssa object in which evaluation is taking place:
-//  it is allowed three operations:
-//  a. append a statement to the current trace, and also move itself to the list of stmts to append to next.
-//  b. push a branch (var + val) on the stack.
-//  c. join. 
 
-var dssa_buffer = {br : 'top', t : []};
-var dssa_prev_cursor = dssa_buffer;
 var dssa_cursor = dssa_buffer;
 
+//  it is allowed three operations:
+
+//  a. append a statement to the current trace, and also move itself to the
+//  list of stmts to append to next.
+
+//  b. push a branch (var + val) on the stack, which does the following:
+//      i. append a branch object to the end of the current statement list.
+//      ii. point to t or f.
+//      iii. if they did not exist before, start a new array and move the cursor over to it.
+
+//  c. join (in which case the cursor steps out of the current "branch") ->
+//  there is a notion of "previous branch" hence previous cursor:
+
+// start with convenience functions
+var cursor_branchp = function (x) { return x.br != undefined; }
+var cursor_stmtsp = function (x) { return (x instanceof Array); }
 
 var dssa_step_in(cond_var, cond_val) {
     dssa_prev_cursor = dssa_cursor;
