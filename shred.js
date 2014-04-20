@@ -67,23 +67,28 @@ var dssa_insertion_pt = 0;
 
 //  c. join (in which case the cursor steps out of the current "branch") ->
 //  there is a notion of "previous branch" hence previous cursor:
+var dssa_cursor_prev = dssa_cursor;
+var dssa_insertion_pt_prev  = dssa_insertion_pt_prev;
 
 // start with convenience functions
 var cursor_branchp = function (x) { return x.br != undefined; }
 var cursor_stmtsp = function (x) { return (x instanceof Array); }
 
-var dssa_append_stmt = function(stmt) {
+var dssa_append_stmt = function(resvar, proc, arg_vars) {
     // supposed to only read?
     if (dssa_cursor.length > dssa_insertion_pt + 1) {
         // do nothing
     } else {
-        dssa_cursor.push(stmt);
+        dssa_cursor.push([resvar, proc, arg_vars]);
     }
     dssa_insertion_pt++;
 }
 
 var dssa_push_branch = function(cond_var, cond_val) {
     var abstract_val = (cond_val) ? 't' : 'f';
+    // No matter what, where to jump back to is always this statement list, at the NEXT position after (b/c of pushed branch).
+    dssa_cursor_prev = dssa_cursor;
+    dssa_insertion_pt_prev = dssa_insertion_pt + 1;
     // only approximate checks for now
     var branch_existsp = dssa_cursor.length > dssa_insertion_pt + 1; // assume it exists
     if (branch_existsp) {
@@ -100,22 +105,22 @@ var dssa_push_branch = function(cond_var, cond_val) {
         var br_obj = {};
         br_obj.br = cond_var;
         br_obj[abstract_val] = [];
+        dssa_cursor.push(br_obj);
+
         dssa_cursor = br_obj[abstract_val];
         dssa_insertion_pt = 0;
     }
 }
 
-var dssa_join = function(phi_stmt) {
-    // TODO
+var dssa_join = function(resvar, proc, arg_vars) {
+    dssa_cursor = dssa_cursor_prev;
+    dssa_insertion_pt = dssa_insertion_pt_prev;
+    dssa_append_stmt(resvar, proc, arg_vars);
 }
 
 // ///////////////////----------------------------------------------------------
 
 var append_trace_buffer = function (resvar, proc, arg_vars) {
-    trace_buffer.push([resvar, proc, arg_vars]);
-};
-
-var append_trace_buffer_with_dssa = function (resvar, proc, arg_vars, stmt_type) {
     trace_buffer.push([resvar, proc, arg_vars]);
 };
 
@@ -158,7 +163,7 @@ var next_var = seq_var_gen;
 // things like trace graphs).
 
 // var add_stmt = append_trace_buffer;
-var add_stmt = append_trace_buffer_with_dssa;
+var add_stmt = append_trace_buffer;
 
 // dump_stmt: Output format of each trace statement. 
 
