@@ -371,11 +371,40 @@ module.exports.dump_stmt_list = dump_stmt_list
 
 // dump_trace: Print the trace.
 function dump_trace() {
-    dump_stmt_list(trace_buffer, false);
+    return dump_stmt_list(trace_buffer, false);
+}
+
+// Pretty-printing DSSA---------------------------------------------------------
+
+module.exports.dump_trace = dump_trace
+
+function output_dssa(buf, scoped) {
+    var res = "";
+    for(var i = 0; i < buf.length; i++) {
+        if (cursor_branchp(buf[i])) {
+            var cond_var = buf[i].br;
+            res += "if (" + cond_var + ") {\n";
+            if (buf[i].t != undefined) {
+                res += output_dssa(buf[i].t, scoped);
+            }
+            res += "} else {\n";
+            if (buf[i].f != undefined) {
+                res += output_dssa(buf[i].f, scoped);
+            }
+            res += "}\n";
+        } else {
+            res += js_stmt_dump(buf[i], scoped);
+        }
+    }
     return res;
 }
 
-module.exports.dump_trace = dump_trace
+function dump_dssa() {
+    var res = output_dssa(dssa_cursor_start, true);
+    return res;
+}
+
+module.exports.dump_dssa = dump_dssa;
 
 // End Shred Functions==========================================================
 
