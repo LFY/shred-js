@@ -173,7 +173,8 @@ var next_var = seq_var_gen;
 // things like trace graphs).
 
 // var add_stmt = append_trace_buffer;
-var add_stmt = append_trace_buffer;
+// var add_stmt = append_trace_buffer;
+var add_stmt = dssa_append_stmt;
 
 // dump_stmt: Output format of each trace statement. 
 
@@ -317,6 +318,7 @@ function traced_if(c, t, e) {
     var cval = val_of(c);
 
     bstack.push([cvar, cval]);
+    dssa_push_branch(cvar, cval);
 
     var res_cell;
     var then_res_var = "uneval";
@@ -345,7 +347,7 @@ function traced_if(c, t, e) {
     var res_var = "PHI_" + next_var(addr);
     var ret_cell = make_cell(res_var, val_of(res_cell));
 
-    add_stmt(res_var, "ifte", [cvar, bcells[cvar]["then"], bcells[cvar]["else"]]);
+    dssa_join(res_var, "ifte", [cvar, bcells[cvar]["then"], bcells[cvar]["else"]]);
 
     return ret_cell;
 }
