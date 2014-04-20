@@ -52,6 +52,7 @@ var dssa_buffer = {br : 'top', t : []};
 // buffer: the entire thing
 // cursor: the current dssa object in which evaluation is taking place:
 // insertion_pt: where to insert statement in the current trace buffer.
+// TODO: create a stack of cursors
 
 var dssa_cursor = dssa_buffer.t;
 var dssa_insertion_pt = 0;
@@ -63,6 +64,7 @@ var reset_dssa = function () {
     dssa_cursor = dssa_cursor_start;
     dssa_cursor_prev = dssa_cursor_start;
     dssa_insertion_pt = 0;
+    dssa_insertion_pt_prev = 0;
 }
 
 //  it is allowed three operations:
@@ -78,7 +80,7 @@ var reset_dssa = function () {
 //  c. join (in which case the cursor steps out of the current "branch") ->
 //  there is a notion of "previous branch" hence previous cursor:
 var dssa_cursor_prev = dssa_cursor;
-var dssa_insertion_pt_prev  = dssa_insertion_pt_prev;
+var dssa_insertion_pt_prev  = dssa_insertion_pt;
 
 // start with convenience functions
 var cursor_branchp = function (x) { return x.br != undefined; }
@@ -87,14 +89,16 @@ var cursor_stmtsp = function (x) { return (x instanceof Array); }
 var dssa_append_stmt = function(resvar, proc, arg_vars) {
     // supposed to only read?
     if (dssa_cursor.length > dssa_insertion_pt + 1) {
-        // do nothing
+        console.log("nothing");
     } else {
+        console.log("bonk");
         dssa_cursor.push([resvar, proc, arg_vars]);
     }
     dssa_insertion_pt++;
 }
 
 var dssa_push_branch = function(cond_var, cond_val) {
+    console.log("push");
     var abstract_val = (cond_val) ? 't' : 'f';
     // No matter what, where to jump back to is always this statement list, at the NEXT position after (b/c of pushed branch).
     dssa_cursor_prev = dssa_cursor;
@@ -123,6 +127,7 @@ var dssa_push_branch = function(cond_var, cond_val) {
 }
 
 var dssa_join = function(resvar, proc, arg_vars) {
+    console.log("pop");
     dssa_cursor = dssa_cursor_prev;
     dssa_insertion_pt = dssa_insertion_pt_prev;
     dssa_append_stmt(resvar, proc, arg_vars);

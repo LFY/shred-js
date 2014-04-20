@@ -308,6 +308,9 @@ function nfqp() {
 var tr = newTrace(nfqp, "nothing");
 __sh.trace_cell.trace = tr;
 
-tr.reset();
 
-console.log(__sh.dump_dssa());
+nfqp();
+
+// tr.reset();
+
+ // console.log(__sh.dump_dssa());
