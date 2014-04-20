@@ -16,12 +16,13 @@ var debug_print = function (x) {
 var var_ctr = 0;
 
 module.exports.reset_var_ctr = function () { var_ctr = 0; }
-module.exports.reset_trace_state = function () {
- while (module.exports.trace_buffer.length > 0) {
-    module.exports.trace_buffer.pop();
-  }
-  module.exports.reset_var_ctr();
 
+module.exports.reset_trace_state = function () {
+    reset_dssa();
+    while (module.exports.trace_buffer.length > 0) {
+        module.exports.trace_buffer.pop();
+    }
+    module.exports.reset_var_ctr();
 }
 
 var seq_var_gen = function (arg) {
@@ -54,6 +55,15 @@ var dssa_buffer = {br : 'top', t : []};
 
 var dssa_cursor = dssa_buffer.t;
 var dssa_insertion_pt = 0;
+
+// a reset function
+var dssa_cursor_start = dssa_buffer.t;
+
+var reset_dssa = function () {
+    dssa_cursor = dssa_cursor_start;
+    dssa_cursor_prev = dssa_cursor_start;
+    dssa_insertion_pt = 0;
+}
 
 //  it is allowed three operations:
 
