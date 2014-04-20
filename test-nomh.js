@@ -310,4 +310,4 @@ __sh.trace_cell.trace = tr;
 
 tr.reset();
 
-console.log(dump_trace());
+console.log(__sh.dump_dssa());
