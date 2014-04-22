@@ -62,9 +62,8 @@ var dssa_cursor_start = dssa_buffer.t;
 
 var reset_dssa = function () {
     dssa_cursor = dssa_cursor_start;
-    dssa_cursor_prev = dssa_cursor_start;
-    dssa_insertion_pt = 0;
-    dssa_insertion_pt_prev = 0;
+    dssa_cursor_stack = [];
+    dssa_insertpt_stack = [];
 }
 
 //  it is allowed three operations:
@@ -79,8 +78,8 @@ var reset_dssa = function () {
 
 //  c. join (in which case the cursor steps out of the current "branch") ->
 //  there is a notion of "previous branch" hence previous cursor:
-var dssa_cursor_prev = dssa_cursor;
-var dssa_insertion_pt_prev  = dssa_insertion_pt;
+var dssa_cursor_stack = [];
+var dssa_insertpt_stack = [];
 
 // start with convenience functions
 var cursor_branchp = function (x) { return x.br != undefined; }
@@ -101,8 +100,9 @@ var dssa_push_branch = function(cond_var, cond_val) {
     console.log("push");
     var abstract_val = (cond_val) ? 't' : 'f';
     // No matter what, where to jump back to is always this statement list, at the NEXT position after (b/c of pushed branch).
-    dssa_cursor_prev = dssa_cursor;
-    dssa_insertion_pt_prev = dssa_insertion_pt + 1;
+    dssa_cursor_stack.push(dssa_cursor);
+    dssa_insertpt_stack.push(dssa_insertion_pt + 1);
+
     // only approximate checks for now
     var branch_existsp = dssa_cursor.length > dssa_insertion_pt + 1; // assume it exists
     if (branch_existsp) {
@@ -128,8 +128,8 @@ var dssa_push_branch = function(cond_var, cond_val) {
 
 var dssa_join = function(resvar, proc, arg_vars) {
     console.log("pop");
-    dssa_cursor = dssa_cursor_prev;
-    dssa_insertion_pt = dssa_insertion_pt_prev;
+    dssa_cursor = dssa_cursor_stack.pop();
+    dssa_insertion_pt = dssa_insertpt_stack.pop();
     dssa_append_stmt(resvar, proc, arg_vars);
 }
 
