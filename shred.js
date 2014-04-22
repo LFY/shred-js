@@ -62,6 +62,8 @@ var dssa_cursor_start = dssa_buffer.t;
 
 var reset_dssa = function () {
     dssa_cursor = dssa_cursor_start;
+    console.log(dssa_cursor);
+    dssa_insertion_pt = 0;
     dssa_cursor_stack = [];
     dssa_insertpt_stack = [];
 }
@@ -87,17 +89,15 @@ var cursor_stmtsp = function (x) { return (x instanceof Array); }
 
 var dssa_append_stmt = function(resvar, proc, arg_vars) {
     // supposed to only read?
-    if (dssa_cursor.length > dssa_insertion_pt + 1) {
-        console.log("nothing");
+    if (dssa_cursor.length > dssa_insertion_pt) {
     } else {
-        console.log("bonk");
         dssa_cursor.push([resvar, proc, arg_vars]);
     }
     dssa_insertion_pt++;
 }
 
 var dssa_push_branch = function(cond_var, cond_val) {
-    console.log("push");
+    // console.log("push");
     var abstract_val = (cond_val) ? 't' : 'f';
     // No matter what, where to jump back to is always this statement list, at the NEXT position after (b/c of pushed branch).
     dssa_cursor_stack.push(dssa_cursor);
@@ -127,7 +127,7 @@ var dssa_push_branch = function(cond_var, cond_val) {
 }
 
 var dssa_join = function(resvar, proc, arg_vars) {
-    console.log("pop");
+    // console.log("pop");
     dssa_cursor = dssa_cursor_stack.pop();
     dssa_insertion_pt = dssa_insertpt_stack.pop();
     dssa_append_stmt(resvar, proc, arg_vars);
