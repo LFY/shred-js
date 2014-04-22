@@ -310,6 +310,8 @@ __sh.trace_cell.trace = tr;
 
 
 nfqp();
+nfqp();
+nfqp();
 
 // tr.reset();
 
