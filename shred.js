@@ -110,6 +110,7 @@ var dssa_push_branch = function(cond_var, cond_val) {
         var tf_existsp = br_obj[abstract_val] != undefined;
         if (tf_existsp) {
             dssa_cursor = br_obj[abstract_val];
+            dssa_insertion_pt = 0;
         } else {
             br_obj[abstract_val] = [];
             dssa_cursor = br_obj[abstract_val];
