@@ -108,23 +108,15 @@ var dssa_push_branch = function(cond_var, cond_val) {
     if (branch_existsp) {
         var br_obj = dssa_cursor[dssa_insertion_pt];
         var tf_existsp = br_obj[abstract_val] != undefined;
-        if (tf_existsp) {
-            dssa_cursor = br_obj[abstract_val];
-            dssa_insertion_pt = 0;
-        } else {
-            br_obj[abstract_val] = [];
-            dssa_cursor = br_obj[abstract_val];
-            dssa_insertion_pt = 0;
-        }
+        if (!tf_existsp) { br_obj[abstract_val] = []; } 
     } else {
         var br_obj = {};
         br_obj.br = cond_var;
         br_obj[abstract_val] = [];
         dssa_cursor.push(br_obj);
-
-        dssa_cursor = br_obj[abstract_val];
-        dssa_insertion_pt = 0;
     }
+    dssa_cursor = br_obj[abstract_val];
+    dssa_insertion_pt = 0;
 }
 
 var dssa_join = function(resvar, proc, arg_vars) {
